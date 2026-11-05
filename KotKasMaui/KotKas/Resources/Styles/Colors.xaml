@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- KotKas kleuren -->
+    <Color x:Key="KkPrimary">#1E6F5C</Color>
+    <Color x:Key="KkPrimaryDark">#14503F</Color>
+    <Color x:Key="KkAccent">#29BB89</Color>
+    <Color x:Key="KkAccentLight">#E3F6EE</Color>
+    <Color x:Key="KkBackground">#F4F7F5</Color>
+    <Color x:Key="KkCard">#FFFFFF</Color>
+    <Color x:Key="KkText">#1F2A27</Color>
+    <Color x:Key="KkMuted">#6B7C76</Color>
+    <Color x:Key="KkBorder">#DDE5E1</Color>
+    <Color x:Key="KkPositive">#2E9E5B</Color>
+    <Color x:Key="KkNegative">#D64545</Color>
+    <Color x:Key="KkNegativeLight">#FBE9E9</Color>
+
+    <Color x:Key="White">White</Color>
+    <Color x:Key="Black">Black</Color>
+    <Color x:Key="Transparent">Transparent</Color>
+
+</ResourceDictionary>

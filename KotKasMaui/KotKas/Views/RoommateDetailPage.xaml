@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:KotKas.ViewModels"
+             xmlns:models="clr-namespace:KotKas.Models"
+             x:Class="KotKas.Views.RoommateDetailPage"
+             x:DataType="vm:IRoommateDetailViewModel"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="16" Padding="20">
+
+            <!-- Saldo van een bestaande kotgenoot -->
+            <Border Style="{StaticResource CardBorder}" IsVisible="{Binding IsExistingRoommate}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="SALDO" Style="{StaticResource FieldLabel}" Margin="0" />
+                    <Label Text="{Binding CurrentRoommate.BalanceText}" FontSize="20" FontAttributes="Bold"
+                           TextColor="{StaticResource KkNegative}">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding CurrentRoommate.IsCreditor}" Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource KkPositive}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <Label Text="{Binding CurrentRoommate.TotalPaidText}" Style="{StaticResource MutedLabel}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Formulier -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="NAAM" Style="{StaticResource FieldLabel}" Margin="0" />
+                    <Entry Text="{Binding Name}" Placeholder="Voornaam Achternaam" />
+                    <BoxView Style="{StaticResource FieldSeparator}" />
+
+                    <Label Text="E-MAIL" Style="{StaticResource FieldLabel}" />
+                    <Entry Text="{Binding Email}" Placeholder="naam@student.thomasmore.be" Keyboard="Email" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Style="{StaticResource ErrorLabel}" />
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Button Grid.Column="0" Text="Annuleren" Style="{StaticResource SecondaryButton}" Command="{Binding CancelCommand}" />
+                <Button Grid.Column="1" Text="Opslaan" Command="{Binding SaveCommand}" />
+            </Grid>
+
+            <!-- Betaalde uitgaven (one-to-many) -->
+            <VerticalStackLayout Spacing="10" IsVisible="{Binding IsExistingRoommate}">
+                <Label Text="Betaalde uitgaven" Style="{StaticResource SectionLabel}" Margin="0,8,0,0" />
+
+                <Label Text="Nog geen uitgaven betaald." Style="{StaticResource MutedLabel}" IsVisible="{Binding HasNoExpenses}" />
+
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding PaidExpenses}" Spacing="8">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:Expense">
+                            <Border Style="{StaticResource CardBorder}" Padding="14,10">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                        <Label Text="{Binding StoreName}" Style="{StaticResource TitleLabel}" />
+                                        <Label Text="{Binding PurchaseDateText}" Style="{StaticResource MutedLabel}" />
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="1" Text="{Binding TotalAmountText}" Style="{StaticResource AmountLabel}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <Button Text="Kotgenoot verwijderen" Style="{StaticResource DangerButton}" Command="{Binding DeleteCommand}" Margin="0,8,0,0" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

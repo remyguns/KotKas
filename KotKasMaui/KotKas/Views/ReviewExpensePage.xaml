@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:KotKas.ViewModels"
+             xmlns:models="clr-namespace:KotKas.Models"
+             x:Class="KotKas.Views.ReviewExpensePage"
+             x:DataType="vm:IReviewExpenseViewModel"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="16" Padding="20">
+
+            <!-- Wat Azure AI gevonden heeft -->
+            <Label Text="{Binding ScanInfo}" IsVisible="{Binding HasScanInfo}" Style="{StaticResource InfoLabel}" />
+
+            <Border Style="{StaticResource CardBorder}" Padding="8" IsVisible="{Binding HasImage}">
+                <Image Source="{Binding ImagePath}" HeightRequest="180" Aspect="AspectFit" />
+            </Border>
+
+            <!-- Formulier -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="WINKEL" Style="{StaticResource FieldLabel}" Margin="0" />
+                    <Entry Text="{Binding StoreName}" Placeholder="bv. Colruyt" />
+                    <BoxView Style="{StaticResource FieldSeparator}" />
+
+                    <Label Text="DATUM" Style="{StaticResource FieldLabel}" />
+                    <DatePicker Date="{Binding PurchaseDate}" Format="dd/MM/yyyy" />
+                    <BoxView Style="{StaticResource FieldSeparator}" />
+
+                    <Label Text="TOTAALBEDRAG (€)" Style="{StaticResource FieldLabel}" />
+                    <Entry Text="{Binding TotalAmount}" Placeholder="0,00" Keyboard="Numeric" />
+                    <BoxView Style="{StaticResource FieldSeparator}" />
+
+                    <Label Text="BETAALD DOOR" Style="{StaticResource FieldLabel}" />
+                    <Picker Title="Kies een kotgenoot"
+                            ItemsSource="{Binding Roommates}"
+                            SelectedItem="{Binding SelectedRoommate}"
+                            ItemDisplayBinding="{Binding Name, x:DataType=models:Roommate}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Style="{StaticResource ErrorLabel}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" HeightRequest="28" />
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Button Grid.Column="0" Text="Annuleren" Style="{StaticResource SecondaryButton}" Command="{Binding CancelCommand}" />
+                <Button Grid.Column="1" Text="Opslaan" Command="{Binding SaveCommand}" />
+            </Grid>
+
+            <Button Text="Uitgave verwijderen" Style="{StaticResource DangerButton}"
+                    Command="{Binding DeleteCommand}" IsVisible="{Binding IsExistingExpense}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

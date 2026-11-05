@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:KotKas.ViewModels"
+             xmlns:models="clr-namespace:KotKas.Models"
+             x:Class="KotKas.Views.RoommatesPage"
+             x:DataType="vm:IRoommatesViewModel"
+             Title="Kotgenoten">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <Border Grid.Row="0" BackgroundColor="{StaticResource KkPrimary}" StrokeThickness="0" Padding="20,20"
+                StrokeShape="RoundRectangle 0,0,24,24">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Kotgenoten" Style="{StaticResource HeaderLabel}" />
+                <Label Text="Saldo = wat je betaalde min jouw deel van alle uitgaven"
+                       Style="{StaticResource SubHeaderLabel}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <Label Grid.Row="1" Margin="20,12,20,0" Text="{Binding ErrorMessage}"
+               IsVisible="{Binding HasError}" Style="{StaticResource ErrorLabel}" />
+
+        <RefreshView Grid.Row="2" Command="{Binding LoadRoommatesCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView ItemsSource="{Binding Roommates}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedRoommate}"
+                            Margin="20,12,20,0">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="20,60" Spacing="8">
+                        <Label Text="Nog geen kotgenoten" HorizontalOptions="Center" Style="{StaticResource TitleLabel}" />
+                        <Label Text="Voeg je kotgenoten toe om de kosten te verdelen." HorizontalOptions="Center" Style="{StaticResource MutedLabel}" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Roommate">
+                        <Border Style="{StaticResource CardBorder}">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                                <Border Grid.Column="0" Style="{StaticResource AvatarBorder}">
+                                    <Label Text="{Binding Initials}" Style="{StaticResource AvatarLabel}" />
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label Text="{Binding Name}" Style="{StaticResource TitleLabel}" />
+                                    <Label Text="{Binding TotalPaidText}" Style="{StaticResource MutedLabel}" />
+                                    <!-- Groen: krijgt geld terug, rood: moet betalen -->
+                                    <Label Text="{Binding BalanceText}" FontAttributes="Bold" TextColor="{StaticResource KkNegative}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsCreditor}" Value="True">
+                                                <Setter Property="TextColor" Value="{StaticResource KkPositive}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <Button Grid.Row="3" Margin="20,8,20,16" Text="+  Kotgenoot toevoegen" Command="{Binding AddRoommateCommand}" />
+    </Grid>
+</ContentPage>

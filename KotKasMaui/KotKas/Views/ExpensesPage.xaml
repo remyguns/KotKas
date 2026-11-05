@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:KotKas.ViewModels"
+             xmlns:models="clr-namespace:KotKas.Models"
+             x:Class="KotKas.Views.ExpensesPage"
+             x:DataType="vm:IExpensesViewModel"
+             Title="Uitgaven">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <Border Grid.Row="0" BackgroundColor="{StaticResource KkPrimary}" StrokeThickness="0" Padding="20,20"
+                StrokeShape="RoundRectangle 0,0,24,24">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Alle uitgaven" Style="{StaticResource HeaderLabel}" />
+                <Label Text="{Binding TotalText}" Style="{StaticResource SubHeaderLabel}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <Label Grid.Row="1" Margin="20,12,20,0" Text="{Binding ErrorMessage}"
+               IsVisible="{Binding HasError}" Style="{StaticResource ErrorLabel}" />
+
+        <RefreshView Grid.Row="2" Command="{Binding LoadExpensesCommand}" IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView ItemsSource="{Binding Expenses}"
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedExpense}"
+                            Margin="20,12,20,0">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="20,60" Spacing="8">
+                        <Label Text="Nog geen uitgaven" HorizontalOptions="Center" Style="{StaticResource TitleLabel}" />
+                        <Label Text="Scan een kasticket om te beginnen." HorizontalOptions="Center" Style="{StaticResource MutedLabel}" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Expense">
+                        <Border Style="{StaticResource CardBorder}">
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="14">
+                                <Border Grid.Column="0" Style="{StaticResource AvatarBorder}">
+                                    <Label Text="{Binding StoreInitial}" Style="{StaticResource AvatarLabel}" />
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label Text="{Binding StoreName}" Style="{StaticResource TitleLabel}" />
+                                    <Label Text="{Binding PaidByText}" Style="{StaticResource MutedLabel}" />
+                                    <Label Text="{Binding PurchaseDateText}" Style="{StaticResource MutedLabel}" />
+                                </VerticalStackLayout>
+
+                                <Label Grid.Column="2" Text="{Binding TotalAmountText}" Style="{StaticResource AmountLabel}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.Footer>
+                    <BoxView HeightRequest="20" Color="Transparent" />
+                </CollectionView.Footer>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:KotKas.ViewModels"
+             x:Class="KotKas.Views.ScanPage"
+             x:DataType="vm:IScanViewModel"
+             Title="Scannen">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="16" Padding="0,0,0,24">
+
+            <!-- Header -->
+            <Border BackgroundColor="{StaticResource KkPrimary}" StrokeThickness="0" Padding="20,24"
+                    StrokeShape="RoundRectangle 0,0,24,24">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="KotKas" Style="{StaticResource HeaderLabel}" />
+                    <Label Text="Scan je kasticket en verdeel de kosten eerlijk op kot." Style="{StaticResource SubHeaderLabel}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <VerticalStackLayout Spacing="16" Padding="20,0">
+
+                <!-- Foto van het ticket -->
+                <Border Style="{StaticResource CardBorder}" Padding="12">
+                    <Grid HeightRequest="340">
+                        <VerticalStackLayout VerticalOptions="Center" Spacing="12"
+                                             IsVisible="{Binding HasImage, Converter={StaticResource InverseBoolConverter}}">
+                            <Image Source="receipt_placeholder.png" HeightRequest="110" Opacity="0.8" />
+                            <Label Text="Nog geen ticket gekozen" HorizontalOptions="Center" Style="{StaticResource TitleLabel}" />
+                            <Label Text="Leg het ticket plat en zorg voor goed licht." HorizontalOptions="Center" Style="{StaticResource MutedLabel}" />
+                        </VerticalStackLayout>
+
+                        <Image Source="{Binding ImagePath}" Aspect="AspectFit" IsVisible="{Binding HasImage}" />
+                    </Grid>
+                </Border>
+
+                <Label Text="{Binding StatusText}" Style="{StaticResource MutedLabel}" HorizontalTextAlignment="Center" />
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <Button Grid.Column="0" Text="📷  Foto nemen" Style="{StaticResource SecondaryButton}"
+                            Command="{Binding TakePhotoCommand}" />
+                    <Button Grid.Column="1" Text="🖼  Galerij" Style="{StaticResource SecondaryButton}"
+                            Command="{Binding PickPhotoCommand}" />
+                </Grid>
+
+                <Button Text="Ticket analyseren" Command="{Binding AnalyzeCommand}" />
+
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10" IsVisible="{Binding IsBusy}">
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" HeightRequest="24" WidthRequest="24" />
+                    <Label Text="Azure AI leest je ticket..." VerticalOptions="Center" Style="{StaticResource MutedLabel}" />
+                </HorizontalStackLayout>
+
+                <Button Text="Uitgave zonder ticket toevoegen" Style="{StaticResource LinkButton}"
+                        Command="{Binding AddManuallyCommand}" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,13 @@
+# Build output
+bin/
+obj/
+.vs/
+*.user
+
+# Geheimen en logs
+kotkas-keys.json
+trainer_log.txt
+
+# OS
+Thumbs.db
+.DS_Store
